@@ -1,65 +1,94 @@
 def main():
     while True:
-        file_name = input("Type (input.txt): ")
+        file_name = input("Type - input.txt: ")
         customers = read_file(file_name)
 
-        if customers:
-            while True:
-                print("\nMenu:")
-                print("1. Display transaction summary")
-                print("2. Quit")
-
-                choice = input("Pick 1 or 2: ")
-
-                if choice == "1":
-                    show_transaction_summary(customers)
-                elif choice == "2":
-                    print("Goodbye!")
-                    return
-                else:
-                    print("Invalid option, try again.")
-        else:
-            if input("Invalid input. would you like to try again? (yes/no): ").lower() != "yes":
-                print("Exiting.")
+        if not customers:
+            try_again = input("File not found, would you like to try again? (yes/no): ")
+            if try_again != "yes":
+                print("FareWell!")
                 break
+            continue
+
+        while True:
+            print("")
+            print("Menu:")
+            print("1. Show transaction ID and names")
+            print("2. Show full receipt")
+            print("3. Quit")
+
+            choice = input("Pick 1, 2 or 3: ")
+
+            if choice == "1":
+                show_ids_and_names(customers)
+            elif choice == "2":
+                show_receipt(customers)
+            elif choice == "3":
+                print("The End!")
+                return
+            else:
+                print("Invalid option")
+
+            again = input("Would you like to see the menu again? (yes/no): ")
+            if again != "yes":
+                print("FareWell")
+                return
 
 
 def read_file(file_name):
-    data = []
+    records = []
     try:
-        with open(file_name, "r") as file:
-            for line_num, line in enumerate(file, 1):
-                parts = line.strip().split(",")
-                if len(parts) != 4:
-                    print(
-                        f"[Line {line_num}] Incorrect format: {line.strip()}")
-                    continue
+        file = open(file_name, "r")
+        for line in file:
+            line = line.strip()
+            parts = line.split(",")
+            if len(parts) == 4:
+                transaction_id = parts[0]
+                first = parts[1]
+                last = parts[2]
                 try:
                     amount = float(parts[3])
-                    data.append([parts[0], parts[1], parts[2], amount])
-                except ValueError:
-                    print(
-                        f"[Line {line_num}] Invalid number for amount: {parts[3]}")
-    except FileNotFoundError:
-        print(f"File '{file_name}' not found.")
-    except Exception as e:
-        print(f"Unexpected error reading file: {e}")
-    return data
+                    record = (transaction_id, first, last, amount)
+                    records.append(record)
+                except:
+                    print("One of the amounts wasn't a number.")
+            else:
+                print("One of the lines is not in the right format.")
+        file.close()
+    except:
+        print("Could not open the file.")
+    return records
 
 
-def show_transaction_summary(customers):
-    print("\nTransaction Summary")
-    print("----------------------------------------------------------------------------")
-    print("Transaction ID | First Name | Last Name | Before  | Discount  | After")
-    print("----------------------------------------------------------------------------")
-    for c in customers:
-        before = c[3]
-        discount = before * 0.40
-        after = before - discount
-        print(
-            f"{c[0]:<15}| {c[1]:<10}| {c[2]:<10}| ${before:<8.2f}| ${discount:<9.2f}| ${after:.2f}")
+def show_ids_and_names(customers):
+    print("")
+    print("Transaction ID and Names")
+    print("-----------------------------")
+    for customer in customers:
+        transaction_id = customer[0]
+        first = customer[1]
+        last = customer[2]
+        print("ID:", transaction_id, "|", first, last)
     print("")
 
 
-# Starts here
+def show_receipt(customers):
+    print("")
+    print("Full Receipt")
+    print("----------------------------------------------")
+    for customer in customers:
+        first = customer[1]
+        last = customer[2]
+        amount = customer[3]
+        discount = amount * 0.4
+        total = amount - discount
+
+        print("Name:", first, last)
+        print("Before: $", round(amount, 2))
+        print("Discount: $", round(discount, 2))
+        print("After: $", round(total, 2))
+        print("----------------------------------------------")
+    print("")
+
+
 main()
