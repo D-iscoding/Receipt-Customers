@@ -19,7 +19,7 @@ def main():
                 else:
                     print("Invalid option, try again.")
         else:
-            if input("File didn’t work. Try again? (yes/no): ").lower() != "yes":
+            if input("Invalid input. would you like to try again? (yes/no): ").lower() != "yes":
                 print("Exiting.")
                 break
 
