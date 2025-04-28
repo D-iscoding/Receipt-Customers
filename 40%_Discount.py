@@ -27,37 +27,36 @@ def main():
                 print("The End!")
                 return
             else:
-                print("Invalid option")
+                print("Invalid input, try 1, 2, or 3.")
 
             again = input("Would you like to see the menu again? (yes/no): ")
             if again != "yes":
                 print("FareWell")
                 return
 
-
 def read_file(file_name):
-    records = []
-    try:
-        file = open(file_name, "r")
-        for line in file:
-            line = line.strip()
-            parts = line.split(",")
-            if len(parts) == 4:
-                transaction_id = parts[0]
-                first = parts[1]
-                last = parts[2]
-                try:
-                    amount = float(parts[3])
-                    record = (transaction_id, first, last, amount)
-                    records.append(record)
-                except:
-                    print("One of the amounts wasn't a number.")
+    customers = []
+
+    file = open(file_name, "r")
+    for line in file:
+        parts = line.strip().split(",")
+        
+        if len(parts) == 4:
+            transaction_id = parts[0]
+            first_name = parts[1]
+            last_name = parts[2]
+            amount = parts[3]
+            
+            if amount.replace(".", "", 1).isdigit() and amount.count(".") <= 1:
+                amount = float(amount)
+                customer = (transaction_id, first_name, last_name, amount)
+                customers.append(customer)
             else:
-                print("One of the lines is not in the right format.")
-        file.close()
-    except:
-        print("Could not open the file.")
-    return records
+                print("Invalid amount in line: ", line)
+        else:
+            print(f"Invalid format in line: ", line)
+    file.close()
+    return customers
 
 
 def show_ids_and_names(customers):
