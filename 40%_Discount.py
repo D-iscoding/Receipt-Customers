@@ -33,19 +33,20 @@ def main():
                 print("FareWell")
                 return
 
+
 def read_file(file_name):
     customers = []
 
     file = open(file_name, "r")
     for line in file:
         parts = line.strip().split(",")
-        
+
         if len(parts) == 4:
             transaction_id = parts[0]
             first_name = parts[1]
             last_name = parts[2]
             amount = parts[3]
-            
+
             if amount.replace(".", "", 1).isdigit() and amount.count(".") <= 1:
                 amount = float(amount)
                 customer = (transaction_id, first_name, last_name, amount)
@@ -53,7 +54,7 @@ def read_file(file_name):
             else:
                 print("Invalid amount in line: ", line)
         else:
-            print(f"Invalid format in line: ", line)
+            print("Invalid format in line: ", line)
     file.close()
     return customers
 
