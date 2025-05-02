@@ -1,95 +1,61 @@
-def main():
-    while True:
-        file_name = input("Type - input.txt: ")
-        customers = read_file(file_name)
-        if not customers:
-            try_again = input(
-                "File not found, would you like to try again? (yes/no): ")
-            if try_again != "yes":
-                print("Farewell!")
-                break
-            continue
-
-        while True:
-            print("")
-            print("Menu")
-            print("1, Show transaction ID and Names")
-            print("2, Show full receipt")
-            print("3, Quit")
-
-            choice = input("Pick 1, 2, or 3: ")
-            if choice == "1":
-                show_ids_and_names(customers)
-            elif choice == "2":
-                show_receipt(customers)
-            elif choice == "3":
-                print("The End!")
-                return
-            else:
-                print("Invalid input, try 1, 2, or 3.")
-
-            again = input("Would you like to see the menu again? (yes/no): ")
-            if again != "yes":
-                print("FareWell")
-                return
-
-
 def read_file(file_name):
-    customers = []
-
-    file = open(file_name, "r")
-    for line in file:
-        parts = line.strip().split(",")
-
-        if len(parts) == 4:
-            transaction_id = parts[0]
-            first_name = parts[1]
-            last_name = parts[2]
-            amount = parts[3]
-
-            if amount.replace(".", "", 1).isdigit() and amount.count(".") <= 1:
-                amount = float(amount)
-                customer = (transaction_id, first_name, last_name, amount)
-                customers.append(customer)
-            else:
-                print("Invalid amount in line: ", line)
-        else:
-            print("Invalid format in line: ", line)
-    file.close()
-    return customers
+    with open(file_name, 'r') as file:
+        data = file.readlines()
+        return data
 
 
-def show_ids_and_names(customers):
+def menu():
+    print("Menu")
+    print(" 1 - Transaction IDs and usernames")
+    print(" 2 - Total beofre and after discount")
+    print(" 3 - quit")
+
+
+def choice_1():
     print("")
-    print("Transaction ID and Names")
-    print("------------------------")
-
-    for customer in customers:
-        transaction_id = customer[0]
-        first = customer[1]
-        last = customer[2]
-        print("ID.", transaction_id, "|", first, last)
-        print("")
+    for transaction_id, f_name, l_name in zip(ids, first_name, last_name):
+        print(transaction_id, f_name + l_name)
 
 
-def show_receipt(customers):
-    print("")
-    print("Full Receipt")
-    print("-----------------------")
-
-    for customer in customers:
-        first = customer[1]
-        last = customer[2]
-        amount = customer[3]
-        discount = amount * 0.4
-        total = amount - discount
-
-        print("Name:", first, last)
-        print("Before: $", round(amount, 2))
-        print("Discount: $", round(discount, 2))
-        print("After: $", round(total, 2))
-        print("--------------------------------")
-        print("")
+def choice_2():
+    for f_name, l_name, before_ammount, after_ammount, saved_ammount in zip(first_name, last_name, before, after, saved):
+        print(f_name + l_name, before_ammount, after_ammount, saved_ammount)
 
 
-main()
+def choice_3():
+    print("The End!")
+
+
+# main starts here
+data = read_file("data.txt")
+ids = []
+first_name = []
+last_name = []
+before = []
+after = []
+saved = []
+for line in data[1:]:
+    line_data = line.strip().split()
+    ids.append(line_data[0])
+    first_name.append(line_data[1])
+    last_name.append(line_data[2])
+    before.append(float(line_data[3]))
+    after.append(float(line_data[4]))
+    saved.append(float(line_data[5]))
+
+print("IDs", ids)
+print("First Names", first_name)
+print("Last Names", last_name)
+print("Before", before)
+print("After", after)
+print("Saved", saved)
+
+menu()
+
+choice = input("Enter your choice (1, 2, or 3): ")
+if choice == "1":
+    choice_1()
+elif choice == "2":
+    choice_2()
+elif choice_3 == "3":
+    choice_3()

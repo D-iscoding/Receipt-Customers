@@ -1,0 +1,11 @@
+ID FirstName LastName Before After Saved
+10 Homer Smith 810.2 486.12 324.08
+20 Jack Stanely 100.0 60.00 40.00
+30 Daniel Hackson 333.90 200.34 133.56
+40 Sara Thomson 1930.02 1158.01 772.01
+50 Thomas Elu 932.0 559.20 372.80
+60 Sam Carol 33.0 19.80 13.20
+70 Tina Jefferson 334.90 200.94 133.96
+80 Wael Lion 8843.2 5305.92 3537.28
+90 Carol Smith 3994.09 2396.45 1597.64
+100 Jack Carlton 99.0 59.40 39.60
